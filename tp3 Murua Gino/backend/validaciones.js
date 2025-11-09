@@ -24,3 +24,13 @@ export const validacionLogin = [
   body('contrasena').notEmpty().withMessage('La contraseña es obligatoria'),
   handleValidationErrors
 ];
+//logica para pacientes
+export const validacionPaciente = [
+  body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
+  body('apellido').notEmpty().withMessage('El apellido es obligatorio'),
+  body('DNI').notEmpty().withMessage('El DNI es obligatorio'),
+  body('fecha_nacimiento')
+    .isDate()
+    .withMessage('La fecha de nacimiento debe ser una fecha válida'),
+  handleValidationErrors
+];

@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:3000/api
+@email = gino@test.com
+@password = password123
+@token = 
+
+# --- Usuarios ---
+
+# Registrar Usuario
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Gino Murua",
+  "email": "{{email}}",
+  "contrasena": "{{password}}"
+}
+
+###
+
+# Login Usuario
+# @name loginRequest
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "contrasena": "{{password}}"
+}
+
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+# --- Pacientes ---
+
+# Obtener Todos los Pacientes
+
+GET {{baseUrl}}/pacientes
+Authorization: Bearer {{token}}
+
+###
+
+# Obtener Paciente por ID
+GET {{baseUrl}}/pacientes/
+Authorization: Bearer {{token}}
+
+###
+
+# Crear Paciente
+POST {{baseUrl}}/pacientes
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Paciente",
+  "apellido": "Prueba",
+  "DNI": "98765432",
+  "fecha_nacimiento": "1995-05-15",
+  "obra_social": "OSDE"
+}
+
+###
+
+# Actualizar Paciente
+PUT {{baseUrl}}/pacientes/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Paciente Actualizado",
+  "apellido": "Prueba",
+  "DNI": "98765432",
+  "fecha_nacimiento": "1995-05-15",
+  "obra_social": "PAMI"
+}
+
+###
+
+# Borrar Paciente
+DELETE {{baseUrl}}/pacientes/1
+Authorization: Bearer {{token}}
