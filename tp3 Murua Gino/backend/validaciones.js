@@ -43,3 +43,13 @@ export const validacionMedico = [
   body('matricula_profesional').notEmpty().withMessage('La matrícula profesional es obligatoria'),
   handleValidationErrors
 ];
+
+//lógica para validar los turnos
+export const validacionTurno = [
+  body('paciente_id').notEmpty().withMessage('El ID del paciente es obligatorio').isInt().withMessage('El ID del paciente debe ser un número'),
+  body('medico_id').notEmpty().withMessage('El ID del médico es obligatorio').isInt().withMessage('El ID del médico debe ser un número'),
+  body('fecha').isDate().withMessage('La fecha debe tener un formato válido'),
+  body('hora').notEmpty().withMessage('La hora es obligatoria'),
+  body('estado').notEmpty().withMessage('El estado es obligatorio'),
+  handleValidationErrors
+];
