@@ -1,17 +1,18 @@
 import { Router } from 'express';
 import pool from '../db.js';
 import { validacionPaciente } from '../validaciones.js';
+import { verificarJWT, esAdmin } from '../auth.js';
 
 const router = Router();
 
 // obtener pacientes
-router.get('/', async (req, res) => {
+router.get('/', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM paciente');
   res.json(rows);
 });
 
 // obtener paciente por id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM paciente WHERE id = ?', [req.params.id]);
 
   if (rows.length <= 0) {
@@ -21,7 +22,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // crear paciente nuevo
-router.post('/', validacionPaciente, async (req, res) => {
+router.post('/', verificarJWT, esAdmin, validacionPaciente, async (req, res) => {
   const { nombre, apellido, DNI, fecha_nacimiento, obra_social } = req.body;
 
   const [resultado] = await pool.query(
@@ -36,7 +37,7 @@ router.post('/', validacionPaciente, async (req, res) => {
 });
 
 // actualizar paciente
-router.put('/:id', validacionPaciente, async (req, res) => {
+router.put('/:id', verificarJWT, esAdmin, validacionPaciente, async (req, res) => {
   const { nombre, apellido, DNI, fecha_nacimiento, obra_social } = req.body;
 
   const [resultado] = await pool.query(
@@ -51,7 +52,7 @@ router.put('/:id', validacionPaciente, async (req, res) => {
 });
 
 // eliminar paciente
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verificarJWT, esAdmin, async (req, res) => {
   const [resultado] = await pool.query('DELETE FROM paciente WHERE id = ?', [req.params.id]);
 
   if (resultado.affectedRows === 0) {

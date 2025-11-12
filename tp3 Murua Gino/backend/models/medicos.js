@@ -1,17 +1,18 @@
 import { Router } from 'express';
 import pool from '../db.js';
 import { validacionMedico } from '../validaciones.js';
+import { verificarJWT, esAdmin } from '../auth.js';
 
 const router = Router();
 
 // Obtener todos los médicos
-router.get('/', async (req, res) => {
+router.get('/', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM medico');
   res.json(rows);
 });
 
 // Obtener un médico por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM medico WHERE id = ?', [req.params.id]);
 
   if (rows.length <= 0) {
@@ -21,7 +22,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Crear un nuevo médico
-router.post('/', validacionMedico, async (req, res) => {
+router.post('/', verificarJWT, esAdmin, validacionMedico, async (req, res) => {
   const { nombre, apellido, especialidad, matricula_profesional } = req.body;
 
   const [resultado] = await pool.query(
@@ -36,7 +37,7 @@ router.post('/', validacionMedico, async (req, res) => {
 });
 
 // Actualizar un médico
-router.put('/:id', validacionMedico, async (req, res) => {
+router.put('/:id', verificarJWT, esAdmin, validacionMedico, async (req, res) => {
   const { nombre, apellido, especialidad, matricula_profesional } = req.body;
 
   const [resultado] = await pool.query(
@@ -51,7 +52,7 @@ router.put('/:id', validacionMedico, async (req, res) => {
 });
 
 // Eliminar un médico
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verificarJWT, esAdmin, async (req, res) => {
   const [resultado] = await pool.query('DELETE FROM medico WHERE id = ?', [req.params.id]);
 
   if (resultado.affectedRows === 0) {

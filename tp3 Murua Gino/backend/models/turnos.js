@@ -1,18 +1,19 @@
 import { Router } from 'express';
 import pool from '../db.js';
 import { validacionTurno } from '../validaciones.js';
+import { verificarJWT, esAdmin } from '../auth.js';
 
 const router = Router();
 
 
 // Obtener todos los turnos
-router.get('/', async (req, res) => {
+router.get('/', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM turno');
   res.json(rows);
 });
 
 // Obtener un turno por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM turno WHERE id = ?', [req.params.id]);
 
   if (rows.length <= 0) {
@@ -22,7 +23,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Crear un nuevo turno
-router.post('/', validacionTurno, async (req, res) => {
+router.post('/', verificarJWT, esAdmin, validacionTurno, async (req, res) => {
   const { paciente_id, medico_id, fecha, hora, estado, observaciones } = req.body;
 
   const [resultado] = await pool.query(
@@ -37,7 +38,7 @@ router.post('/', validacionTurno, async (req, res) => {
 });
 
 // Actualizar un turno
-router.put('/:id', validacionTurno, async (req, res) => {
+router.put('/:id', verificarJWT, esAdmin, validacionTurno, async (req, res) => {
   const { paciente_id, medico_id, fecha, hora, estado, observaciones } = req.body;
 
   const [resultado] = await pool.query(
@@ -52,7 +53,7 @@ router.put('/:id', validacionTurno, async (req, res) => {
 });
 
 // Eliminar un turno
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verificarJWT, esAdmin, async (req, res) => {
   const [resultado] = await pool.query('DELETE FROM turno WHERE id = ?', [req.params.id]);
 
   if (resultado.affectedRows === 0) {
