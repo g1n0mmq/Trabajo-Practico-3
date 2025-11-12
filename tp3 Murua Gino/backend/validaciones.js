@@ -34,3 +34,12 @@ export const validacionPaciente = [
     .withMessage('La fecha de nacimiento debe ser una fecha válida'),
   handleValidationErrors
 ];
+
+//lógica para validar los médicos
+export const validacionMedico = [
+  body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
+  body('apellido').notEmpty().withMessage('El apellido es obligatorio'),
+  body('especialidad').notEmpty().withMessage('La especialidad es obligatoria'),
+  body('matricula_profesional').notEmpty().withMessage('La matrícula profesional es obligatoria'),
+  handleValidationErrors
+];
