@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import pool from '../db.js';
-import { validacionPaciente } from '../validaciones.js';
-import { verificarJWT, esAdmin } from '../auth.js';
+import pool from './db.js';
+import { validacionPaciente } from './validaciones.js';
+import { verificarJWT, esAdmin } from './auth.js';
 
 const router = Router();
 

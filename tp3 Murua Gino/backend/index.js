@@ -2,12 +2,12 @@ import express from 'express';
 import 'dotenv/config';
 import cors from 'cors';
 import passport from 'passport';
-import './auth.js'; // Importar para configurar la estrategia de Passport
+import './auth.js';
 import { testConnection } from './db.js';
-import rutasUsuarios from './models/usuarios.js'; 
-import rutasPacientes from './models/pacientes.js';
-import rutasMedicos from './models/medicos.js';
-import rutasTurnos from './models/turnos.js';
+import rutasUsuarios from './usuarios.js'; 
+import rutasPacientes from './pacientes.js';
+import rutasMedicos from './medicos.js';
+import rutasTurnos from './turnos.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
