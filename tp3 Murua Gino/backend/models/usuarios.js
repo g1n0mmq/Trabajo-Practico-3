@@ -9,7 +9,7 @@ const router = Router();
 
 const crearUsuario = async (nombre, email, contrasenaHash) => {
   const [resultado] = await pool.query(
-    "INSERT INTO usuario (nombre, email, contraseña, rol) VALUES (?, ?, ?, 'usuario')",
+    "INSERT INTO usuario (nombre, email, contrasena, rol) VALUES (?, ?, ?, 'usuario')",
     [nombre, email, contrasenaHash]
   );
   return resultado.insertId;
@@ -46,7 +46,7 @@ const login = async (req, res) => {
     if (!usuario) {
       return res.status(401).json({ message: 'Credenciales inválidas (email)' });
     }
-    const esCorrecta = await bcrypt.compare(contrasena, usuario.contraseña);
+    const esCorrecta = await bcrypt.compare(contrasena, usuario.contrasena);
     if (!esCorrecta) {
       return res.status(401).json({ message: 'Credenciales inválidas (contraseña)' });
     }

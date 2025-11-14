@@ -28,7 +28,10 @@ export const validacionLogin = [
 export const validacionPaciente = [
   body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
   body('apellido').notEmpty().withMessage('El apellido es obligatorio'),
-  body('DNI').notEmpty().withMessage('El DNI es obligatorio'),
+  body('DNI')
+    .notEmpty().withMessage('El DNI es obligatorio')
+    .isNumeric().withMessage('El DNI debe contener solo números')
+    .isLength({ min: 7, max: 8 }).withMessage('El DNI debe tener entre 7 y 8 dígitos'),
   body('fecha_nacimiento')
     .isDate()
     .withMessage('La fecha de nacimiento debe ser una fecha válida'),
@@ -49,7 +52,12 @@ export const validacionTurno = [
   body('paciente_id').notEmpty().withMessage('El ID del paciente es obligatorio').isInt().withMessage('El ID del paciente debe ser un número'),
   body('medico_id').notEmpty().withMessage('El ID del médico es obligatorio').isInt().withMessage('El ID del médico debe ser un número'),
   body('fecha').isDate().withMessage('La fecha debe tener un formato válido'),
-  body('hora').notEmpty().withMessage('La hora es obligatoria'),
-  body('estado').notEmpty().withMessage('El estado es obligatorio'),
+  body('hora')
+    .notEmpty().withMessage('La hora es obligatoria')
+    .matches(/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/)
+    .withMessage('La hora debe tener el formato HH:MM:SS'),
+  body('estado')
+    .notEmpty().withMessage('El estado es obligatorio')
+    .isIn(['pendiente', 'confirmado', 'cancelado']).withMessage("El estado debe ser 'pendiente', 'confirmado' o 'cancelado'"),
   handleValidationErrors
 ];

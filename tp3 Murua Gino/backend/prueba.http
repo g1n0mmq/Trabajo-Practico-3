@@ -1,53 +1,51 @@
-@baseUrl = http://localhost:3000/api
-@email = gino@test.com
-@password = password123
-@token = 
+@url = http://localhost:3000/api
 
-# --- Usuarios ---
+# --- Usuarios (Auth) ---
 
 # Registrar Usuario
-POST {{baseUrl}}/auth/register
+POST {{url}}/auth/register
 Content-Type: application/json
 
 {
-  "nombre": "Gino Murua",
-  "email": "{{email}}",
-  "contrasena": "{{password}}"
+  "nombre": "Gino",
+  "email": "gino@test.com",
+  "contrasena": "password123"
 }
 
 ###
 
 # Login Usuario
 # @name loginRequest
-POST {{baseUrl}}/auth/login
+POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "{{email}}",
-  "contrasena": "{{password}}"
+  "email": "gino@test.com",
+  "contrasena": "password123"
 }
+###
+# captura el token de la respuesta del login
+@token = {{loginRequest.response.body.token}} 
 
-> {%
-    client.global.set("token", response.body.token);
-%}
 
+###
 # --- Pacientes ---
 
+
 # Obtener Todos los Pacientes
-
-GET {{baseUrl}}/pacientes
-Authorization: Bearer {{token}}
-
+GET {{url}}/pacientes
+# Aquí utilizamos el token #
+Authorization: Bearer {{token}} 
 ###
 
 # Obtener Paciente por ID
-GET {{baseUrl}}/pacientes/
+GET {{url}}/pacientes/1
 Authorization: Bearer {{token}}
 
 ###
 
 # Crear Paciente
-POST {{baseUrl}}/pacientes
+POST {{url}}/pacientes
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -62,7 +60,7 @@ Authorization: Bearer {{token}}
 ###
 
 # Actualizar Paciente
-PUT {{baseUrl}}/pacientes/1
+PUT {{url}}/pacientes/1
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -77,5 +75,76 @@ Authorization: Bearer {{token}}
 ###
 
 # Borrar Paciente
-DELETE {{baseUrl}}/pacientes/1
+DELETE {{url}}/pacientes/1
+Authorization: Bearer {{token}}
+
+###
+
+# --- Médicos ---
+
+# Obtener Todos los Médicos
+GET {{url}}/medicos
+Authorization: Bearer {{token}} 
+
+###
+
+# Obtener Médico por ID
+GET {{url}}/medicos/1
+Authorization: Bearer {{token}} 
+
+
+###
+# Crear Médico
+POST {{url}}/medicos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Dr.",
+  "apellido": "House",
+  "especialidad": "Cancer",
+  "matricula_profesional": "M00"
+}
+
+
+###
+
+# Borrar Médico
+DELETE {{url}}/medicos/1
+Authorization: Bearer {{token}}
+
+###
+
+# --- Turnos ---
+
+# Obtener Todos los Turnos
+GET {{url}}/turnos
+Authorization: Bearer {{token}} 
+
+###
+
+# Obtener Turno por ID
+GET {{url}}/turnos/1
+Authorization: Bearer {{token}}
+
+###
+
+# Crear Turno
+POST {{url}}/turnos
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "paciente_id": 1,
+  "medico_id": 1,
+  "fecha": "2025-11-20",
+  "hora": "10:30:00",
+  "estado": "pendiente",
+  "observaciones": "Dolor de cabeza"
+}
+
+###
+
+# Borrar Turno
+DELETE {{url}}/turnos/1
 Authorization: Bearer {{token}}
