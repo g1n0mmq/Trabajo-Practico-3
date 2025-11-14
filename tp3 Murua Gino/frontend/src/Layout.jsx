@@ -1,8 +1,5 @@
-// frontend/src/Layout.jsx (Actualizado)
-
 import { Outlet, Link } from "react-router-dom";
 import { useAuth } from "./Auth";
-// import { Ingresar } from "./Ingresar"; // <-- Ya no lo usamos
 
 export const Layout = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -24,7 +21,6 @@ export const Layout = () => {
             <Link to="/turnos">Turnos</Link>
           </li>
         </ul>
-        {/* Lógica de botones actualizada */}
         <ul>
           {isAuthenticated ? (
             <li>

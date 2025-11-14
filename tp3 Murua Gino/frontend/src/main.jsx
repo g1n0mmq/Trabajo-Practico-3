@@ -1,11 +1,9 @@
-// frontend/src/main.jsx (Actualizado)
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@picocss/pico";
 import "./index.css";
 import { Layout } from "./Layout.jsx";
-import { Home } from "./Home.jsx";
+import { Home } from "./Home.jsx"; 
 import { AuthPage, AuthProvider, AuthRol } from "./Auth.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
@@ -13,8 +11,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { PaginaPacientes } from "./PaginaPacientes.jsx";
 import { PaginaMedicos } from "./PaginaMedicos.jsx";
 import { PaginaTurnos } from "./PaginaTurnos.jsx";
-import { PaginaLogin } from "./PaginaLogin.jsx";       // <-- Nuevo
-import { PaginaRegistro } from "./PaginaRegistro.jsx"; // <-- Nuevo
+import { PaginaLogin } from "./PaginaLogin.jsx";
+import { PaginaRegistro } from "./PaginaRegistro.jsx";
+
+// Manejo del CRUD pacientes
+import { CrearPaciente } from "./CrearPaciente.jsx";
+import { DetallesPaciente } from "./DetallePaciente.jsx";
+import { ModificarPaciente } from "./ModificarPaciente.jsx";
+
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -23,12 +27,8 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-
-            {/* Rutas públicas de Autenticación */}
             <Route path="login" element={<PaginaLogin />} />
             <Route path="register" element={<PaginaRegistro />} />
-
-            {/* Rutas Protegidas */}
             <Route
               path="pacientes"
               element={
@@ -38,6 +38,36 @@ createRoot(document.getElementById("root")).render(
               }
             />
             <Route
+              path="pacientes/crear"
+              element={
+                <AuthPage>
+                  <AuthRol rol="admin">
+                    <CrearPaciente />
+                  </AuthRol>
+                </AuthPage>
+              }
+            />
+            <Route
+              path="pacientes/:id"
+              element={
+                <AuthPage>
+                  <DetallesPaciente />
+                </AuthPage>
+              }
+            />
+            <Route
+              path="pacientes/:id/modificar"
+              element={
+                <AuthPage>
+                  <AuthRol rol="admin">
+                    <ModificarPaciente />
+                  </AuthRol>
+                </AuthPage>
+              }
+            />
+
+            {/* --- RUTAS DE MÉDICOS --- */}
+            <Route
               path="medicos"
               element={
                 <AuthPage>
@@ -45,17 +75,6 @@ createRoot(document.getElementById("root")).render(
                 </AuthPage>
               }
             />
-            <Route
-              path="turnos"
-              element={
-                <AuthPage>
-                  <PaginaTurnos />
-                </AuthPage>
-              }
-            />
-            
-            {/* (Aquí irían tus rutas de 'crear' y 'modificar' protegidas) */}
-            
           </Route>
         </Routes>
       </BrowserRouter>
