@@ -6,9 +6,20 @@ import { verificarJWT, esAdmin } from '../auth.js';
 const router = Router();
 
 // Obtener todos los médicos
-router.get('/', verificarJWT, async (req, res) => {
-  const [rows] = await pool.query('SELECT * FROM medico');
-  res.json(rows);
+router.get('/', verificarJWT, async (req, res) => {try { 
+    const { nombre, apellido, especialidad, matricula_profesional } = req.body;
+    //Modificamos para que no hayan duplicados
+    const id = await MedicoModel.crear(nombre, apellido, especialidad, matricula_profesional);
+    
+    res.status(201).json({ id: id, message: 'Medico creado' });
+
+  } catch (e) { 
+    
+    if (e.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json({ message: 'Esa matrícula profesional ya está registrada.' });
+    } 
+    res.status(500).json({ message: 'Error del servidor' });
+  }
 });
 
 // Obtener un médico por ID
