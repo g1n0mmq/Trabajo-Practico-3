@@ -3,26 +3,19 @@ import pool from './db.js';
 import { validacionMedico } from './validaciones.js';
 import { verificarJWT, esAdmin } from './auth.js';
 
-const router = Router();
-
 // Obtener todos los médicos
-router.get('/', verificarJWT, async (req, res) => {try { 
-    const { nombre, apellido, especialidad, matricula_profesional } = req.body;
-    //Modificamos para que no hayan duplicados
-    const id = await MedicoModel.crear(nombre, apellido, especialidad, matricula_profesional);
-    
-    res.status(201).json({ id: id, message: 'Medico creado' });
+const router = Router();
+router.get('/', verificarJWT, async (req, res) => {
+  try { 
+    const [rows] = await pool.query('SELECT * FROM medico');
+    res.json(rows); // Devuelve el array de médicos
 
   } catch (e) { 
-    
-    if (e.code === 'ER_DUP_ENTRY') {
-      return res.status(400).json({ message: 'Esa matrícula profesional ya está registrada.' });
-    } 
+    console.error(e); 
     res.status(500).json({ message: 'Error del servidor' });
   }
 });
-
-// Obtener un médico por ID
+// Obtener un médico por ID 
 router.get('/:id', verificarJWT, async (req, res) => {
   const [rows] = await pool.query('SELECT * FROM medico WHERE id = ?', [req.params.id]);
 
@@ -32,7 +25,7 @@ router.get('/:id', verificarJWT, async (req, res) => {
   res.json(rows[0]);
 });
 
-// Crear un nuevo médico
+// Crear un nuevo médico 
 router.post('/', verificarJWT, esAdmin, validacionMedico, async (req, res) => {
   const { nombre, apellido, especialidad, matricula_profesional } = req.body;
 
@@ -47,7 +40,7 @@ router.post('/', verificarJWT, esAdmin, validacionMedico, async (req, res) => {
   });
 });
 
-// Actualizar un médico
+// Actualizar un médico 
 router.put('/:id', verificarJWT, esAdmin, validacionMedico, async (req, res) => {
   const { nombre, apellido, especialidad, matricula_profesional } = req.body;
 
@@ -62,7 +55,7 @@ router.put('/:id', verificarJWT, esAdmin, validacionMedico, async (req, res) => 
   res.json({ message: 'Médico actualizado' });
 });
 
-// Eliminar un médico
+// Eliminar un médico 
 router.delete('/:id', verificarJWT, esAdmin, async (req, res) => {
   const [resultado] = await pool.query('DELETE FROM medico WHERE id = ?', [req.params.id]);
 
