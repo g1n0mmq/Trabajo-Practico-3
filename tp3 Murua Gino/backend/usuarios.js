@@ -60,14 +60,17 @@ const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '4h' }
     );
-    res.status(200).json({ message: 'Login exitoso', token: token });
+  res.status(200).json({ 
+        message: 'Login exitoso', 
+        token: token,
+        rol: usuario.rol, 
+        email: usuario.email});
+
   } catch (error) {
     res.status(500).json({ message: 'Error en el servidor', error: error.message });
   }
 };
 
-
-
 router.post('/register', validacionRegistro, register);
 router.post('/login', validacionLogin, login);
-export default router;
+export default router;  
