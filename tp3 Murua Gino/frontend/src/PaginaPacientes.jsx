@@ -1,29 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { AuthRol, useAuth } from "./Auth";
-import { useCallback } from "react";
 import { Link } from "react-router-dom";
 
 export function PaginaPacientes() {
   const { fetchAuth } = useAuth();
-
   const [pacientes, setPacientes] = useState([]);
 
   const fetchPacientes = useCallback(async () => {
-    const response = await fetchAuth(
-      "http://localhost:3000/api/pacientes" 
-    );
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.log("Error:", data.message);
-      return;
+    try {
+      const response = await fetchAuth("http://localhost:3000/api/pacientes");
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Error al cargar pacientes");
+      }
+      setPacientes(data);
+    } catch (err) {
+      console.error("Error en fetchPacientes:", err);
     }
-
-    setPacientes(data); 
   }, [fetchAuth]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchPacientes();
   }, [fetchPacientes]);
 
@@ -38,9 +34,10 @@ export function PaginaPacientes() {
         return window.alert("Error al quitar paciente: " + data.message);
       }
 
-      await fetchPacientes();
+      setPacientes(pacientesActuales => pacientesActuales.filter(p => p.id !== id));
     }
   };
+
   return (
     <article>
       <h2>Pacientes</h2>

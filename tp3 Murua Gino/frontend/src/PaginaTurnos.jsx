@@ -7,28 +7,22 @@ export function PaginaTurnos() {
 
   const [turnos, setTurnos] = useState([]);
 
-  const fetchTurnos = useCallback(async () => {
-    const response = await fetchAuth(
-      "http://localhost:3000/api/turnos"
-    );
-    const data = await response.json();
-        
-    console.log("DATOS RECIBIDOS DE LA API:", data);
-
-
-    if (!response.ok) {
-      console.log("Error:", data.message);
-      return;
-    }
-
-    setTurnos(data);
-  }, [fetchAuth]);
-
-
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const fetchTurnos = async () => {
+      const response = await fetchAuth(
+        "http://localhost:3000/api/turnos"
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log("Error:", data.message);
+        return;
+      }
+
+      setTurnos(data);
+    };
     fetchTurnos();
-  }, [fetchTurnos]);
+  }, [fetchAuth]);
 
   const handleQuitar = async (id) => {
     if (window.confirm("¿Desea quitar el turno?")) { 
@@ -41,7 +35,7 @@ export function PaginaTurnos() {
         return window.alert("Error al quitar turno: " + data.message); 
       }
 
-      await fetchTurnos(); 
+      setTurnos(turnosActuales => turnosActuales.filter(t => t.ID !== id));
     }
   };
 
@@ -73,18 +67,18 @@ export function PaginaTurnos() {
               <td>{t.Paciente_id}</td>
               <td>{t.Medico_id}</td>
               <td>{new Date(t.Fecha).toLocaleDateString()}</td> 
-              <td>{t.Hora}</td>
+              <td>{t.Hora.slice(0, 5)}</td>
               <td>{t.Estado}</td>
               <td>
                 <div>
-                  <Link role="button" to={`/turnos/${t.id}`}>
+                  <Link role="button" to={`/turnos/${t.ID}`}>
                     Ver
                   </Link>
                   <AuthRol rol="admin">
-                    <Link role="button" to={`/turnos/${t.id}/modificar`}> 
+                    <Link role="button" to={`/turnos/${t.ID}/modificar`}>
                       Modificar
                     </Link>
-                    <button onClick={() => handleQuitar(t.id)}>Quitar</button>
+                    <button onClick={() => handleQuitar(t.ID)}>Quitar</button>
                   </AuthRol>
                 </div>
               </td>

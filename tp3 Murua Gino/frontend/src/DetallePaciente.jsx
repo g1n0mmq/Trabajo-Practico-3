@@ -1,5 +1,3 @@
-// frontend/src/DetallesPaciente.jsx
-
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "./Auth";
 import { useParams, Link } from "react-router-dom";
@@ -18,7 +16,9 @@ export const DetallesPaciente = () => {
       if (!response.ok) {
         throw new Error(data.message || "Error al cargar el paciente");
       }
-      setPaciente(data);
+      // Estandarizar el ID a una sola propiedad para consistencia
+      const pacienteEstandarizado = { ...data, ID: data.ID || data.id };
+      setPaciente(pacienteEstandarizado);
     } catch (err) {
       setError(err.message);
     }
@@ -36,7 +36,6 @@ export const DetallesPaciente = () => {
     return <article aria-busy="true">Cargando detalles del paciente...</article>;
   }
 
-  // Usamos las MAYÚSCULAS que nos manda la API
   return (
     <article>
       <h2>Detalles del Paciente</h2>

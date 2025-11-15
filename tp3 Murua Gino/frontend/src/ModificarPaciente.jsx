@@ -8,12 +8,11 @@ export const ModificarPaciente = () => {
   const { id } = useParams(); 
   const [error, setError] = useState(null);
 
-  // El estado se inicializa vacío
   const [values, setValues] = useState({
     ID: id,
     Nombre: "",
     Apellido: "",
-    DNI: "",
+    dni: "",
     fecha_nacimiento: "",
     obra_social: "",
   });
@@ -24,11 +23,14 @@ export const ModificarPaciente = () => {
       const response = await fetchAuth(`http://localhost:3000/api/pacientes/${id}`);
       const data = await response.json();
       if (response.ok) {
-  
-        if (data.fecha_nacimiento) {
-          data.fecha_nacimiento = data.fecha_nacimiento.split('T')[0];
-        }
-        setValues(data); 
+        setValues({
+          ID: data.ID || data.id,
+          Nombre: data.Nombre,
+          Apellido: data.Apellido,
+          dni: data.DNI,
+          fecha_nacimiento: data.fecha_nacimiento ? data.fecha_nacimiento.split('T')[0] : "",
+          obra_social: data.obra_social,
+        });
       } else {
         throw new Error(data.message || "Error al cargar datos");
       }
@@ -55,7 +57,7 @@ export const ModificarPaciente = () => {
     const payload = {
       nombre: values.Nombre,
       apellido: values.Apellido,
-      DNI: values.DNI,
+      dni: values.dni,
       fecha_nacimiento: values.fecha_nacimiento,
       obra_social: values.obra_social,
     };
@@ -107,11 +109,11 @@ export const ModificarPaciente = () => {
             required
           />
           
-          <label htmlFor="DNI">DNI</label>
+          <label htmlFor="dni">DNI</label>
           <input
-            id="DNI"
-            name="DNI" 
-            value={values.DNI}
+            id="dni"
+            name="dni"
+            value={values.dni}
             onChange={handleChange}
             required
           />

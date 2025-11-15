@@ -1,8 +1,10 @@
+// frontend/src/CrearMedico.jsx
+
 import { useState } from "react";
 import { useAuth } from "./Auth";
 import { useNavigate } from "react-router-dom";
 
-export const CrearPaciente = () => {
+export const CrearMedico = () => {
   const { fetchAuth } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -10,9 +12,8 @@ export const CrearPaciente = () => {
   const [values, setValues] = useState({
     nombre: "",
     apellido: "",
-    dni: "",
-    fecha_nacimiento: "",
-    obra_social: "",
+    especialidad: "",
+    matricula_profesional: "",
   });
 
   const handleChange = (e) => {
@@ -27,24 +28,23 @@ export const CrearPaciente = () => {
     setError(null);
 
     try {
-      const response = await fetchAuth("http://localhost:3000/api/pacientes", {
+      const response = await fetchAuth("http://localhost:3000/api/medicos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values), 
+        body: JSON.stringify(values),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
         if (data.errors) {
-          const mensajesError = data.errors.map(err => err.msg).join('. ');
+          const mensajesError = data.errors.map((err) => err.msg).join(". ");
           throw new Error(mensajesError);
         }
-        throw new Error(data.message || "Error al crear el paciente");
+        throw new Error(data.message || "Error al crear el médico");
       }
 
-      navigate("/pacientes");
-
+      navigate("/medicos");
     } catch (err) {
       setError(err.message);
     }
@@ -52,10 +52,9 @@ export const CrearPaciente = () => {
 
   return (
     <article>
-      <h2>Crear Nuevo Paciente</h2>
+      <h2>Crear Nuevo Médico</h2>
       <form onSubmit={handleSubmit}>
         <fieldset>
-          
           <label htmlFor="nombre">Nombre</label>
           <input
             id="nombre"
@@ -64,7 +63,7 @@ export const CrearPaciente = () => {
             onChange={handleChange}
             required
           />
-          
+
           <label htmlFor="apellido">Apellido</label>
           <input
             id="apellido"
@@ -73,37 +72,28 @@ export const CrearPaciente = () => {
             onChange={handleChange}
             required
           />
-          
-          <label htmlFor="dni">DNI</label>
+
+          <label htmlFor="especialidad">Especialidad</label>
           <input
-            id="dni"
-            name="dni" 
-            value={values.dni}
+            id="especialidad"
+            name="especialidad"
+            value={values.especialidad}
             onChange={handleChange}
             required
           />
-          
-          <label htmlFor="fecha_nacimiento">Fecha de Nacimiento</label>
+
+          <label htmlFor="matricula_profesional">Matrícula Profesional</label>
           <input
-            id="fecha_nacimiento"
-            name="fecha_nacimiento"
-            type="date"
-            value={values.fecha_nacimiento}
+            id="matricula_profesional"
+            name="matricula_profesional"
+            value={values.matricula_profesional}
             onChange={handleChange}
             required
           />
-          
-          <label htmlFor="obra_social">Obra Social</label>
-          <input
-            id="obra_social"
-            name="obra_social" 
-            value={values.obra_social}
-            onChange={handleChange}
-          />
-          
+
           {error && <p style={{ color: "red" }}>{error}</p>}
         </fieldset>
-        <input type="submit" value="Crear Paciente" />
+        <input type="submit" value="Crear Médico" />
       </form>
     </article>
   );

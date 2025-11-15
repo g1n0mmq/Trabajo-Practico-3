@@ -7,25 +7,22 @@ export function PaginaMedicos() {
 
   const [medicos, setMedicos] = useState([]); 
 
-  const fetchMedicos = useCallback(async () => { 
-    const response = await fetchAuth(
-      "http://localhost:3000/api/medicos" 
-    );
-    const data = await response.json();
-    console.log("DATOS RECIBIDOS DE LA API:", data);
-
-    if (!response.ok) {
-      console.log("Error:", data.message);
-      return;
-    }
-
-    setMedicos(data); 
-  }, [fetchAuth]);
-
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const fetchMedicos = async () => { 
+      const response = await fetchAuth(
+        "http://localhost:3000/api/medicos" 
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log("Error:", data.message);
+        return;
+      }
+
+      setMedicos(data);
+    };
     fetchMedicos(); 
-  }, [fetchMedicos]);
+  }, [fetchAuth]);
 
   const handleQuitar = async (id) => {
     if (window.confirm("¿Desea quitar el médico?")) { 
@@ -37,7 +34,7 @@ export function PaginaMedicos() {
         return window.alert("Error al quitar médico: " + data.message); 
       }
 
-      await fetchMedicos();
+      setMedicos(medicosActuales => medicosActuales.filter(m => m.ID !== id));
     }
   };
 
@@ -71,11 +68,11 @@ export function PaginaMedicos() {
               <td>{m.Matricula_profesional}</td> 
               <td>
                 <div>
-                  <Link role="button" to={`/medicos/${m.ID}`}> 
+                  <Link role="button" to={`/medicos/${m.ID}`}>
                     Ver
                   </Link>
                   <AuthRol rol="admin">
-                    <Link role="button" to={`/medicos/${m.ID}/modificar`}> 
+                    <Link role="button" to={`/medicos/${m.ID}/modificar`}>
                       Modificar
                     </Link>
                     <button onClick={() => handleQuitar(m.ID)}>Quitar</button> 
