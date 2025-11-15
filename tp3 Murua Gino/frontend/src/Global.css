@@ -1,0 +1,361 @@
+/* --- ESTILOS GLOBALES MINIMALISTAS (MODO OSCURO) --- */
+
+/* 1. Variables de Color y Tipografía (Tema Oscuro) */
+:root {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  
+  /* Paleta Oscura */
+  --background-color: #1a1a1e; /* Fondo principal muy oscuro */
+  --card-background-color: #282a2e; /* Fondo de tarjetas y nav */
+  --text-color: #e8eaed; /* Texto principal claro */
+  --text-color-secondary: #969ba1; /* Texto secundario (labels) */
+  --border-color: #44474a; /* Bordes sutiles */
+  --border-radius: 8px;
+
+  /* Colores de Acento (Azul) */
+  --primary-color: #8ab4f8; /* Azul de acento (Gemini) */
+  --primary-hover-color: #aecbfa;
+  --primary-text-on-button: #1a1a1e; /* Texto oscuro para botón azul */
+
+  /* Colores Secundarios (Gris) */
+  --secondary-color: #5f6368;
+  --secondary-hover-color: #7f8388;
+  --secondary-text-on-button: var(--text-color);
+
+  /* Colores de Peligro */
+  --danger-color: #f28b82;
+  --danger-hover-color: #f6a9a2;
+
+  /* Formularios */
+  --input-bg-color: #303134;
+  --input-text-color: var(--text-color);
+  --input-focus-border: var(--primary-color);
+
+  /* Tablas */
+  --table-header-color: #303134;
+  --table-row-hover-color: #3c4043;
+  --table-row-even-color: #2c2e31;
+
+  /* Sombras */
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --nav-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* 2. Estilo Base del Body */
+body {
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  display: block; /* Anular 'display: flex' de index.css */
+  place-items: normal; /* Anular 'place-items: center' de index.css */
+}
+
+#root {
+  width: 100%;
+}
+
+/* 3. Layout (Nav de Layout.jsx y Contenedor Principal) */
+main.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  /* IMPORTANTE: Espacio superior para la barra de navegación fija */
+  padding-top: 7rem;
+}
+
+main.container > nav {
+  /* --- SOLUCIÓN DE BARRA FIJA --- */
+  position: fixed;
+  top: 1rem; /* Espacio desde el borde superior de la ventana */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1320px; /* Debe coincidir con main.container */
+  z-index: 1000;
+  /* --- Fin de la solución --- */
+  
+  background-color: var(--card-background-color);
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--nav-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+nav ul li a {
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+nav ul li a:hover {
+  color: var(--text-color);
+}
+
+/* Botones en la Nav (Ingresar/Registrarse) */
+nav ul li a[role="button"] {
+  color: var(--primary-text-on-button);
+  background-color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+nav ul li a[role="button"].secondary {
+  color: var(--secondary-text-on-button);
+  background-color: var(--secondary-color);
+}
+
+nav ul li a[role="button"]:hover {
+  background-color: var(--primary-hover-color);
+  color: var(--primary-text-on-button);
+}
+
+nav ul li a[role="button"].secondary:hover {
+  background-color: var(--secondary-hover-color);
+  color: var(--secondary-text-on-button);
+}
+
+/* Botón Salir */
+nav ul li button {
+  background-color: var(--secondary-color);
+  color: var(--secondary-text-on-button);
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+nav ul li button:hover {
+  background-color: var(--secondary-hover-color);
+}
+
+/* 4. Contenedor Principal (usado en todas las páginas) */
+article {
+  background: var(--card-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 2rem 2.5rem;
+  max-width: 1200px;
+  margin: 1rem auto 2rem auto; /* 1rem de margen superior (relativo al padding de main) */
+}
+
+/* 5. Títulos de Página */
+article h2 {
+  color: var(--text-color);
+  margin-top: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+article h3 {
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+/* 6. Formularios */
+label {
+  color: var(--text-color-secondary);
+  font-weight: 500;
+  font-size: 1.1rem; /* Aumentado */
+  margin-bottom: 0.25rem; /* Añadido */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  background-color: var(--input-bg-color);
+  color: var(--input-text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1rem; /* Aumentado */
+  font-size: 1.05rem; /* Aumentado */
+  width: 100%;
+  box-sizing: border-box; /* Añadido para padding correcto */
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px rgba(138, 180, 248, 0.3); /* Sombra de foco sutil */
+}
+
+/* --- NUEVO: Reglas para layout de Formulario --- */
+article form fieldset {
+  padding: 0;
+  border: 0;
+  margin: 0;
+  
+  display: grid; /* Usar grid */
+  grid-template-columns: 1fr; /* Forzar UNA sola columna */
+  /* Se elimina el 'gap' para controlarlo con el margen del label */
+}
+
+/* Espacio extra entre "grupos" de label/input */
+article form fieldset label {
+  margin-top: 1.5rem; /* Aumentado */
+}
+
+article form fieldset label:first-of-type {
+  margin-top: 0; /* Sin espacio para el primer label */
+}
+/* --- FIN DE NUEVAS REGLAS --- */
+
+
+/* 7. Botones */
+
+/* Botones Primarios (Submit, "Nuevo Paciente", "Modificar" en detalles, etc.) */
+[type="submit"],
+article > a[role="button"],
+article footer a[role="button"] {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  color: var(--primary-text-on-button);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none; /* Para los <a> */
+  display: inline-block; /* Para los <a> */
+  margin-bottom: 1rem; /* Espacio para los "Nuevo..." */
+}
+[type="submit"]:hover,
+article > a[role="button"]:hover,
+article footer a[role="button"]:hover {
+  background-color: var(--primary-hover-color);
+  border-color: var(--primary-hover-color);
+  color: var(--primary-text-on-button);
+}
+
+/* Botones Secundarios (Cancelar, Volver, etc) */
+.secondary,
+[type="button"],
+article footer a[role="button"].secondary {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-text-on-button);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none; /* Para los <a> */
+}
+.secondary:hover,
+[type="button"]:hover,
+article footer a[role="button"].secondary:hover {
+  background-color: var(--secondary-hover-color);
+  border-color: var(--secondary-hover-color);
+  color: var(--secondary-text-on-button);
+}
+
+/* --- ESTILOS DE BOTONES EN TABLA --- */
+table div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Botones de tabla (Ver, Modificar) */
+table a[role="button"] {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  color: var(--secondary-text-on-button);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  margin-bottom: 0;
+  line-height: 1.5;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+}
+table a[role="button"]:hover {
+  background-color: var(--secondary-hover-color);
+  border-color: var(--secondary-hover-color);
+  color: var(--secondary-text-on-button);
+}
+
+/* Botón Quitar (Rojo claro - Outlined) */
+table button:not([role="button"]):not(.secondary) {
+  background-color: transparent;
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.85rem;
+  margin-bottom: 0;
+  line-height: 1.5;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease; /* Añadido para suavidad */
+}
+table button:not([role="button"]):not(.secondary):hover {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+  color: var(--primary-text-on-button);
+}
+
+
+/* 8. Tablas */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden; /* Para que el border-radius afecte a las celdas */
+}
+thead th {
+  background-color: var(--table-header-color);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+}
+tbody td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+tbody tr {
+  background-color: var(--card-background-color);
+  transition: background-color 0.2s ease;
+}
+tbody tr:last-child td {
+  border-bottom: none;
+}
+tbody tr:nth-child(even) {
+  background-color: var(--table-row-even-color);
+}
+tbody tr:hover {
+  background-color: var(--table-row-hover-color);
+}
+
+/* 9. Varios */
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 2rem 0;
+}
+footer.grid {
+  margin-top: 1.5rem;
+  display: flex; /* Añadido para controlar el layout de botones */
+  gap: 1rem; /* Espacio entre botones "Volver" y "Modificar" */
+}

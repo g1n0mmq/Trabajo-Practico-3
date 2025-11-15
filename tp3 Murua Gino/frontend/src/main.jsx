@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@picocss/pico";
+import "./Global.css"
 import "./index.css";
 import { Layout } from "./Layout.jsx";
 import { Home } from "./Home.jsx";
